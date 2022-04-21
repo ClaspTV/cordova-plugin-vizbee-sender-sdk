@@ -6,15 +6,14 @@
 
   <name>Cordova VizbeeKit</name>
 
-  <js-module src="www/vizbee.cast.js" name="vizbee">
-    <clobbers target="vizbee.cast" />
+  <js-module src="www/VizbeeSenderSDKPlugin.js" name="vizbee">
+    <clobbers target="VizbeeSenderSDKPlugin" />
   </js-module>
 
   <platform name="ios">
     <config-file target="config.xml" parent="/*">
       <feature name="Vizbee">
         <param name="ios-package" value="VizbeeBootstrap"/>
-        <param name="onload" value="true" />
       </feature>
     </config-file>
 
@@ -32,5 +31,9 @@
 
     <header-file src="src/ios/VizbeeBootstrap.h" />
     <source-file src="src/ios/VizbeeBootstrap.m" />
+    <header-file src="src/ios/VizbeeAppAdapter.h" />
+    <source-file src="src/ios/VizbeeAppAdapter.m" />
+    <header-file src="src/ios/VizbeeVideo.h" />
+    <source-file src="src/ios/VizbeeVideo.m" />
   </platform>
 </plugin>
