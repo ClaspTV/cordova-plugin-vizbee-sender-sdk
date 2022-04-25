@@ -24,8 +24,8 @@
         <source url="https://github.com/CocoaPods/Specs.git"/>
       </config>
       <pods use-frameworks="false">
-        <pod name="VizbeeKit" spec="6.1.7" />
-        <pod name="google-cast-sdk-no-bluetooth-dynamic" spec="4.5.0" />
+        <pod name="VizbeeKit" spec="6.1.7" embed="true" />
+        <pod name="google-cast-sdk-no-bluetooth-dynamic" spec="4.5.0" embed="true"/>
       </pods>
     </podspec>
 
@@ -35,5 +35,41 @@
     <source-file src="src/ios/VizbeeAppAdapter.m" />
     <header-file src="src/ios/VizbeeVideo.h" />
     <source-file src="src/ios/VizbeeVideo.m" />
+  </platform>
+
+  <platform name="android">
+    <config-file target="res/xml/config.xml" parent="/*">
+      <feature name="Vizbee">
+        <param name="android-package" value="VizbeeBootstrap"/>
+      </feature>
+    </config-file>
+
+    <config-file target="AndroidManifest.xml" parent="/manifest/application">
+      android:usesCleartextTraffic="true"
+      
+      <meta-data android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME" android:value="CastOptionsProvider" />
+
+      <activity
+        android:name="tv.vizbee.api.RemoteActivity"
+        android:launchMode="singleTop"
+        android:theme="@style/Theme.Vizbee.Custom">
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <data android:scheme="@string/vizbee_app_id" android:host="video"/>
+        </intent-filter>
+      </activity>
+    </config-file>
+
+    <framework src="src/android/gradle/build.gradle" custom="true" type="gradleReference"/>
+
+    <source-file src="src/android/java/CastOptionsProvider.java" target-dir="tv/vizbee/cdsender" />
+    <source-file src="src/android/java/VizbeeBootstrap.java" target-dir="tv/vizbee/cdsender" />
+    <source-file src="src/android/java/VizbeeAppAdapter.java" target-dir="tv/vizbee/cdsender" />
+    <source-file src="src/android/java/VizbeeVideo.java" target-dir="tv/vizbee/cdsender" />
+
+    <resource-file src="src/android/res/values/vizbee.xml"
+            target="res/values/vizbee.xml" />
   </platform>
 </plugin>

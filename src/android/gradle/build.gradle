@@ -1,0 +1,10 @@
+repositories {
+    maven {
+        url 'https://repo.claspws.tv/artifactory/libs'
+    }
+}
+
+dependencies {
+    api 'tv.vizbee:android-remote-sdk:6.1.9'
+}
+
