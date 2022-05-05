@@ -4,20 +4,20 @@
         id="cordova-plugin-vizbee-sender-sdk"
         version="1.0.0">
 
-  <name>Cordova VizbeeKit</name>
+  <name>VizbeeKit</name>
 
-  <js-module src="www/VizbeeSenderSDKPlugin.js" name="vizbee">
-    <clobbers target="VizbeeSenderSDKPlugin" />
+  <js-module src="www/VizbeeSenderSDK.js" name="VizbeeSenderSDK">
+    <clobbers target="cordova.plugins.vizbeeSenderSDK" />
   </js-module>
 
   <platform name="ios">
     <config-file target="config.xml" parent="/*">
-      <feature name="Vizbee">
+      <feature name="VizbeeSenderSDK">
         <param name="ios-package" value="VizbeeBootstrap"/>
       </feature>
     </config-file>
 
-    <edit-config file="*-Info.plist" mode="merge" target="NSLocalNetworkUsageDescription">
+    <!-- <edit-config file="*-Info.plist" mode="merge" target="NSLocalNetworkUsageDescription">
         <string>This app enables you to cast videos and automatically install and login to Roku, FireTV, SamsungTV, LGTV, Chromecast and other streaming devices on your home network.</string>
     </edit-config>
     <edit-config file="*-Info.plist" mode="merge" target="NSBonjourServices">
@@ -27,7 +27,7 @@
           <string>_viziocast._tcp</string>
           <string>_amzn-wplay._tcp</string>
         </array>
-    </edit-config>
+    </edit-config> -->
 
     <podspec>
       <config>
@@ -51,15 +51,15 @@
 
   <platform name="android">
     <config-file target="res/xml/config.xml" parent="/*">
-      <feature name="Vizbee">
-        <param name="android-package" value="VizbeeBootstrap"/>
+      <feature name="VizbeeSenderSDK">
+        <param name="android-package" value="tv.vizbee.cdsender.VizbeeNativeManager"/>
       </feature>
     </config-file>
 
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
       android:usesCleartextTraffic="true"
       
-      <meta-data android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME" android:value="CastOptionsProvider" />
+      <meta-data android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME" android:value="tv.vizbee.cdsender.CastOptionsProvider" />
 
       <activity
         android:name="tv.vizbee.api.RemoteActivity"
@@ -76,10 +76,11 @@
 
     <framework src="src/android/gradle/build.gradle" custom="true" type="gradleReference"/>
 
+    <source-file src="src/android/java/VizbeeNativeManager.java" target-dir="tv/vizbee/cdsender" />
     <source-file src="src/android/java/CastOptionsProvider.java" target-dir="tv/vizbee/cdsender" />
-    <source-file src="src/android/java/VizbeeBootstrap.java" target-dir="tv/vizbee/cdsender" />
     <source-file src="src/android/java/VizbeeAppAdapter.java" target-dir="tv/vizbee/cdsender" />
     <source-file src="src/android/java/VizbeeVideo.java" target-dir="tv/vizbee/cdsender" />
+    <source-file src="src/android/java/VizbeeCastButtonView.java" target-dir="tv/vizbee/cdsender" />
 
     <resource-file src="src/android/res/values/vizbee.xml"
             target="res/values/vizbee.xml" />

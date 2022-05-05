@@ -1,39 +1,27 @@
 package tv.vizbee.cdsender;
 
-import android.app.Application;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.Gravity;
+import android.widget.FrameLayout;
 
+import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaPlugin;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+
+import tv.vizbee.api.RemoteButton;
 import tv.vizbee.api.VizbeeContext;
 import tv.vizbee.api.VizbeeOptions;
 
-public class VizbeeBootstrap {
+public class VizbeeBootstrap extends CordovaPlugin {
+  
+    private static final String LOG_TAG = VizbeeBootstrap.class.getName();
 
-  private static final String TAG = VizbeeBootstrap.class.getName();
-
-  // singleton
-
-  private static VizbeeBootstrap singleton = null;
-
-  public static VizbeeBootstrap getInstance() {
-    if (singleton == null) {
-        singleton = new VizbeeBootstrap();
     }
-
-    return singleton;
-  }
-
-  private VizbeeBootstrap() {}
-
-  public void initialize(Application applicationContext, String vizbeeAppId) {
-    initialize(applicationContext, vizbeeAppId, true);
-  }
-
-  public void initialize(Application applicationContext, String vizbeeAppId, boolean isProduction) {
-      VizbeeOptions options = new VizbeeOptions.Builder().enableProduction(isProduction).build();
-      initialize(applicationContext, vizbeeAppId, options);
-  }
-
-  public void initialize(Application applicationContext, String vizbeeAppId, VizbeeOptions options) {
-      VizbeeContext.getInstance().init(applicationContext, vizbeeAppId, new VizbeeAppAdapter(), options);
-  }
-
 }

@@ -1,5 +1,8 @@
 package tv.vizbee.cdsender;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Map;
 import java.util.HashMap;
 
@@ -59,22 +62,25 @@ public class VizbeeVideo {
         return customProperties;
     }
 
-    public VizbeeVideo(VizbeeVideo vizbeeVideo) {
+    public VizbeeVideo(JSONObject videoJsonObject) {
 
-        guid = (null != vizbeeVideo.guid) ? vizbeeVideo.guid : "";
-        
-        title = (null != vizbeeVideo.title) ? vizbeeVideo.title : "";
-        subtitle = (null != vizbeeVideo.subtitle) ? vizbeeVideo.subtitle : "";
-        imageUrl = (null != vizbeeVideo.imageUrl) ? vizbeeVideo.imageUrl : "";
-        isLive = vizbeeVideo.isLive;
+        try {
+            guid = videoJsonObject.has("guid") ? videoJsonObject.getString("guid") : "";
 
-        streamUrl = (null != vizbeeVideo.streamUrl) ? vizbeeVideo.streamUrl : "";
-        startPositionInSeconds = vizbeeVideo.startPositionInSeconds;
+            title = videoJsonObject.has("title") ? videoJsonObject.getString("title") : "";
+            subtitle = videoJsonObject.has("subtitle") ? videoJsonObject.getString("subtitle") : "";
+            imageUrl = videoJsonObject.has("imageUrl") ? videoJsonObject.getString("imageUrl") : "";
+            isLive = videoJsonObject.has("isLive") && videoJsonObject.getBoolean("isLive");
 
-        customProperties = new HashMap<>();
-        if (null != vizbeeVideo.customProperties) {
-            customProperties = vizbeeVideo.customProperties;
+            streamUrl = videoJsonObject.has("streamUrl") ? videoJsonObject.getString("streamUrl") : "";
+            startPositionInSeconds = videoJsonObject.has("startPositionInSeconds") ? videoJsonObject.getDouble("startPositionInSeconds") : 0;
+
+            customProperties = new HashMap<>();
+            if (videoJsonObject.has("customProperties")) {
+                customProperties = (Map<String, Object>) videoJsonObject.getJSONObject("customProperties");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
-
 }

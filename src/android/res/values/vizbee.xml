@@ -6,7 +6,7 @@
     <!-- =============================================================== -->
 
     <!-- Update with VizbeeAppID assigned to your app -->
-    <string name="vizbee_app_id">vzb*********</string>
+    <string name="vizbee_app_id">vzb2000001</string>
 
     <!-- RemoteActivity theme -->
     <style name="Theme.Vizbee.Custom" parent="Theme.Vizbee.Futura">
@@ -33,8 +33,8 @@
 
           Update the fonts below to suit your app.
          -->
-        <item name="vzb_primaryFont">fonts/<ProximaNova-Bold.otf></item>
-        <item name="vzb_secondaryFont">fonts/<ProximaNova-Reg.otf></item>
+        <!-- <item name="vzb_primaryFont">fonts/<ProximaNova-Bold.otf></item>
+        <item name="vzb_secondaryFont">fonts/<ProximaNova-Reg.otf></item> -->
         
         <!-- =============================================================== -->
         <!-- Advanced Style Customization (Optional)                         -->

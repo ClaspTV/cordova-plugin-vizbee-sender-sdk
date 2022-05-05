@@ -6,12 +6,16 @@
 #import <VizbeeKit/VizbeeKit.h>
 #import <Foundation/Foundation.h>
 
-@interface VizbeeBootstrap : NSObject
+#import <Cordova/CDV.h>
 
-+(instancetype) getInstance;
+@interface VizbeeBootstrap : CDVPlugin
 
--(void) initialize:(NSString*)vizbeeAppId;
+-(void) initialize:(CDVInvokedUrlCommand*)command;
 
--(void) initialize:(NSString*)vizbeeAppId withOptions:(VZBOptions*) options;
+-(void) addCastIcon:(CDVInvokedUrlCommand *)command;
+
+-(void) smartPrompt:(CDVInvokedUrlCommand *)command;
+
+-(void) smartPlay:(CDVInvokedUrlCommand *)command;
 
 @end
