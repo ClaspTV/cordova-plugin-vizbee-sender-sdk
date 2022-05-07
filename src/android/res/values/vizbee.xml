@@ -22,8 +22,8 @@
 
           Update the colors below to suit your app.
         -->
-        <item name="vzb_primaryColor">#000000</item>
-        <item name="vzb_secondaryColor">#0000FF</item>
+        <item name="vzb_primaryColor">#333333</item>
+        <item name="vzb_secondaryColor">#d7bb73</item>
         <item name="vzb_tertiaryColor">#FFFFFF</item>
 
         <!-- Your app's theme fonts -->
@@ -64,6 +64,9 @@
             https://gist.github.com/vizbee/7e9613f76a546c8f9ed9087e91bdc7b1#customize-interstitial-cards
         -->
 
+        <!-- Buttons -->
+        <item name="vzb_callToActionButtonStyle">@style/VizbeeTheme.CallToAction</item>
+
          <!-- -->
          <!-- SPECIFIC CARD ATTRIBUTES -->
          <!-- -->
@@ -94,6 +97,13 @@
          The background image your app will display in Vizbee's UI
          <item name="vzb_drawable">@drawable/vizbee_cards_background</item>
     </style> -->
+
+    <style name="VizbeeTheme.CallToAction" parent="@style/Widget.Vizbee.Futura.Button.CallToAction">
+        <item name="android:textAppearance">?attr/vzb_textAppearanceTitle2</item>
+        <item name="vzb_backgroundEnabled">?attr/vzb_secondaryColor</item>
+        <item name="android:textColor">?attr/vzb_primaryColor</item>
+        <item name="android:layout_marginTop">32dp</item>
+    </style>
 
     <!-- Device Info view -->
     <!--<style name="Theme.Vizbee.Custom.DeviceInfoViewNameLabelStyle" parent="Widget.Vizbee.Futura.DeviceInfoViewNameLabel">

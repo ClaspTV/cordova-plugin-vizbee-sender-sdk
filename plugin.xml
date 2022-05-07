@@ -13,7 +13,7 @@
   <platform name="ios">
     <config-file target="config.xml" parent="/*">
       <feature name="VizbeeSenderSDK">
-        <param name="ios-package" value="VizbeeBootstrap"/>
+        <param name="ios-package" value="VizbeeNativeManager"/>
       </feature>
     </config-file>
 
@@ -41,8 +41,8 @@
       </pods>
     </podspec>
 
-    <header-file src="src/ios/VizbeeBootstrap.h" />
-    <source-file src="src/ios/VizbeeBootstrap.m" />
+    <header-file src="src/ios/VizbeeNativeManager.h" />
+    <source-file src="src/ios/VizbeeNativeManager.m" />
     <header-file src="src/ios/VizbeeAppAdapter.h" />
     <source-file src="src/ios/VizbeeAppAdapter.m" />
     <header-file src="src/ios/VizbeeVideo.h" />

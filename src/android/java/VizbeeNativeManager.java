@@ -1,7 +1,9 @@
 package tv.vizbee.cdsender;
 
 import android.app.Activity;
+import android.os.Build;
 import android.util.Log;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import org.apache.cordova.CallbackContext;
@@ -9,10 +11,6 @@ import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Type;
 
 import tv.vizbee.api.VizbeeContext;
 import tv.vizbee.api.VizbeeOptions;
@@ -38,12 +36,18 @@ public class VizbeeNativeManager extends CordovaPlugin {
 
         switch (action) {
             case "initialize": {
-               String vizbeeAppId = args.get(0).toString();
+                String vizbeeAppId = args.get(0).toString();
                 cordova.getActivity().runOnUiThread(() -> initialize(vizbeeAppId));
                 break;
             }
             case "addCastIcon": {
-                cordova.getActivity().runOnUiThread(this::addCastIcon);
+                int x = (int) args.get(0);
+                int y = (int) args.get(1);
+                cordova.getActivity().runOnUiThread(() -> addCastIcon(x, y));
+                break;
+            }
+            case "removeCastIcon": {
+                cordova.getActivity().runOnUiThread(this::removeCastIcon);
                 break;
             }
             case "smartPrompt": {
@@ -65,24 +69,46 @@ public class VizbeeNativeManager extends CordovaPlugin {
 
     public void initialize(String appId) {
 
-        Log.i(LOG_TAG, "initialize");
+        Log.v(LOG_TAG, "initialize");
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            cordova.getActivity().onTopResumedActivityChanged(true);
+        }
         VizbeeOptions options = new VizbeeOptions.Builder().enableProduction(true).build();
         VizbeeContext.getInstance().enableVerboseLogging();
         VizbeeContext.getInstance().init(cordova.getActivity().getApplication(), appId, new VizbeeAppAdapter(), options);
     }
 
     //----------------
-    // UI - Add CastButton
+    // UI - CastButton
     //----------------
 
-    public void addCastIcon() {
+    public void addCastIcon(int x, int y) {
 
-        Log.i(LOG_TAG, "Adding CastIcon");
+        Log.v(LOG_TAG, "Adding CastIcon");
 
         FrameLayout layout = (FrameLayout) webView.getView().getParent();
-        VizbeeCastButtonView vizbeeCastButtonView = new VizbeeCastButtonView(cordova.getActivity());
+        VizbeeCastButtonView vizbeeCastButtonView = new VizbeeCastButtonView(cordova.getActivity(), x, y);
         layout.addView(vizbeeCastButtonView);
+    }
+
+    public void removeCastIcon() {
+
+        Log.v(LOG_TAG, "Removing CastIcon");
+
+        FrameLayout layout = (FrameLayout) webView.getView().getParent();
+        VizbeeCastButtonView vizbeeCastButtonView = null;
+        for (int i = 0; i < layout.getChildCount(); i++) {
+            View child = layout.getChildAt(i);
+            if (child instanceof VizbeeCastButtonView) {
+                vizbeeCastButtonView = (VizbeeCastButtonView) child;
+                break;
+            }
+        }
+        if (null != vizbeeCastButtonView) {
+            Log.v(LOG_TAG, "Found CastIconView and removing");
+            layout.removeView(vizbeeCastButtonView);
+        }
     }
 
     //----------------

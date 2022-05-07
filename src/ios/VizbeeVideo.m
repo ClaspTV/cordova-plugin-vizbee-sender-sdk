@@ -1,6 +1,6 @@
 //
 //  VizbeeVideo.m
-//  RNVizbeeSenderSdk
+//  CPVizbeeSenderSdk
 //
 
 #import "VizbeeVideo.h"
