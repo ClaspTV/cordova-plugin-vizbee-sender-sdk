@@ -1,7 +1,7 @@
 {
   "name": "cordova-plugin-vizbee-sender-sdk",
   "version": "1.0.0",
-  "description": "",
+  "description": "<h1 align=\"center\">Cordova plugin for vizbee sender sdk</h1>",
   "cordova": {
     "id": "cordova-plugin-vizbee-sender-sdk",
     "platforms": [
@@ -11,8 +11,17 @@
   },
   "keywords": [
     "ecosystem:cordova",
-    "cordova-ios"
+    "cordova-ios",
+    "cordova-android"
   ],
-  "author": "",
-  "license": "ISC"
+  "author": "Vizbee",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ClaspTV/cordova-plugin-vizbee-sender-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ClaspTV/cordova-plugin-vizbee-sender-sdk/issues"
+  },
+  "homepage": "https://github.com/ClaspTV/cordova-plugin-vizbee-sender-sdk#readme"
 }
