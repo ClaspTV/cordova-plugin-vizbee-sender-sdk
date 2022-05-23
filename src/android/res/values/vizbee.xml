@@ -113,4 +113,8 @@
         <item name="android:singleLine">false</item>
     </style> -->
 
+    <!--- ?attr/vzb_secondaryColor does not work as we don't apply the vizbee custom theme to the
+    activity hosting the cast icon. -->
+    <color name="cast_button_background_color">#d7bb73</color>
+
 </resources>

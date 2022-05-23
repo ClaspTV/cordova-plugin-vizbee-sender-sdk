@@ -17,6 +17,10 @@
 #pragma mark - Constructors & Notifications
 //-------------
 
+-(void) setChromecastAppStoreId:(CDVInvokedUrlCommand*)command {
+    // Do nothing, as it is required only for Android platform to show lock/notification controls
+}
+
 -(void) initialize:(CDVInvokedUrlCommand*) command {
 
     NSLog(@"Initialize VizbeeSDK");
@@ -26,6 +30,7 @@
 
     // initialize the sdk
     VZBOptions *vizbeeOptions = [VZBOptions new];
+    vizbeeOptions.uiConfig = VizbeeStyles.darkTheme;
     VizbeeAppAdapter* vizbeeAppAdapter = [[VizbeeAppAdapter alloc] init];
     [Vizbee startWithAppID:vizbeeAppId appAdapterDelegate:vizbeeAppAdapter andVizbeeOptions:vizbeeOptions];
 
@@ -52,20 +57,47 @@
 
 -(void) addCastIcon:(CDVInvokedUrlCommand*) command {
 
-    NSLog(@"Adding CastIcon");
+    // read x and y positions
+    int x = [command.arguments[0] intValue];
+    int y = [command.arguments[1] intValue];
+    int width = [command.arguments[2] intValue];
+    int height = [command.arguments[3] intValue];
+    NSLog(@"Adding CastIcon at x: %d and y: %d width: %d and height %d", x, y, width, height);
+    
     [self topViewControllerThreadSafe:^(UIViewController* vc) {
-
+        
         // create cast button
         VZBCastButton* castButton = [Vizbee createCastButton];
+        castButton.castButtonType = VZBCastButtonTypeFloating;
         [vc.view addSubview:castButton];
-
+        
         // add autolayout constraints
         castButton.translatesAutoresizingMaskIntoConstraints = false;
-        NSLayoutConstraint* constraintTop = [NSLayoutConstraint constraintWithItem:castButton attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:vc.view attribute:NSLayoutAttributeTop multiplier:1.0 constant:48.0];
-        NSLayoutConstraint* constraintTrailing = [NSLayoutConstraint constraintWithItem:castButton attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:vc.view attribute:NSLayoutAttributeTrailing multiplier:1.0 constant:-24.0];
-        NSLayoutConstraint* constraintWidth = [NSLayoutConstraint constraintWithItem:castButton attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:24.0];
-        NSLayoutConstraint* constraintHeight = [NSLayoutConstraint constraintWithItem:castButton attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:24.0];
-        [NSLayoutConstraint activateConstraints:@[constraintTop, constraintTrailing, constraintWidth, constraintHeight]];
+        NSLayoutConstraint* constraintTop = [NSLayoutConstraint constraintWithItem:castButton
+                                                                         attribute:NSLayoutAttributeTop
+                                                                         relatedBy:NSLayoutRelationEqual
+                                                                            toItem:vc.view
+                                                                         attribute:NSLayoutAttributeTop
+                                                                        multiplier:1.0 constant:y];
+        NSLayoutConstraint* constraintLeading = [NSLayoutConstraint constraintWithItem:castButton
+                                                                             attribute:NSLayoutAttributeLeading
+                                                                             relatedBy:NSLayoutRelationEqual
+                                                                                toItem:vc.view
+                                                                             attribute:NSLayoutAttributeLeading
+                                                                            multiplier:1.0 constant:x];
+        NSLayoutConstraint* constraintWidth = [NSLayoutConstraint constraintWithItem:castButton
+                                                                           attribute:NSLayoutAttributeWidth
+                                                                           relatedBy:NSLayoutRelationEqual
+                                                                              toItem:nil
+                                                                           attribute:NSLayoutAttributeNotAnAttribute
+                                                                          multiplier:1.0 constant:width];
+        NSLayoutConstraint* constraintHeight = [NSLayoutConstraint constraintWithItem:castButton
+                                                                            attribute:NSLayoutAttributeHeight
+                                                                            relatedBy:NSLayoutRelationEqual
+                                                                               toItem:nil
+                                                                            attribute:NSLayoutAttributeNotAnAttribute
+                                                                           multiplier:1.0 constant:height];
+        [NSLayoutConstraint activateConstraints:@[constraintTop, constraintLeading, constraintWidth, constraintHeight]];
     }];
 }
 
@@ -264,7 +296,7 @@ RCT_REMAP_METHOD(getSessionConnectedDevice, getSessionConnectedDeviceWithResolve
     VZBSessionManager* sessionManager = [Vizbee getSessionManager];
     if (nil != sessionManager) {
         
-        NSLog(@"RNVZBSDK: Adding session state listener");
+        NSLog(@"CPVZBSDK: Adding session state listener");
         [sessionManager addSessionStateDelegate:self];
 
         // force first update
@@ -277,7 +309,7 @@ RCT_REMAP_METHOD(getSessionConnectedDevice, getSessionConnectedDeviceWithResolve
     VZBSessionManager* sessionManager = [Vizbee getSessionManager];
     if (nil != sessionManager) {
 
-        NSLog(@"RNVZBSDK: Removing session state listener");
+        NSLog(@"CPVZBSDK: Removing session state listener");
         [sessionManager removeSessionStateDelegate:self];
     }
 }
@@ -285,7 +317,7 @@ RCT_REMAP_METHOD(getSessionConnectedDevice, getSessionConnectedDeviceWithResolve
 -(void) notifySessionStatus:(VZBSessionState) newState {
 
     if (newState == self.lastUpdatedState) {
-        NSLog(@"RNVZBSDK: Ignoring duplicate state update");
+        NSLog(@"CPVZBSDK: Ignoring duplicate state update");
         return;
     }
     self.lastUpdatedState = newState;
@@ -299,7 +331,7 @@ RCT_REMAP_METHOD(getSessionConnectedDevice, getSessionConnectedDeviceWithResolve
         [stateMap addEntriesFromDictionary:deviceMap];
     }
 
-    NSLog(@"RNVZBSDK: Sending session status %@", stateMap);
+    NSLog(@"CPVZBSDK: Sending session status %@", stateMap);
 //    [self sendEvent:@"VZB_SESSION_STATUS" withBody:stateMap];
 }
 
@@ -372,35 +404,35 @@ RCT_REMAP_METHOD(getSessionConnectedDevice, getSessionConnectedDeviceWithResolve
     // sanity
     [self removeVideoStatusListener];
 
-    NSLog(@"RNVZBSDK: Trying to add video status listener");
+    NSLog(@"CPVZBSDK: Trying to add video status listener");
     VZBVideoClient* videoClient = [self getSessionVideoClient];
     if (nil != videoClient) {
 
         [videoClient addVideoStatusDelegate:self];
-        NSLog(@"RNVZBSDK: Success adding video status listener");
+        NSLog(@"CPVZBSDK: Success adding video status listener");
 
         // force first update
         [self notifyMediaStatus:[videoClient getVideoStatus]];
     } else {
 
-        NSLog(@"RNVZBSDK: Failed adding video status listener");
+        NSLog(@"CPVZBSDK: Failed adding video status listener");
     }
 }
 
 -(void) removeVideoStatusListener {
     
-    NSLog(@"RNVZBSDK: Trying to remove video status listener");
+    NSLog(@"CPVZBSDK: Trying to remove video status listener");
     VZBVideoClient* videoClient = [self getSessionVideoClient];
     if (nil != videoClient) {
         
-        NSLog(@"RNVZBSDK: Success removing video status listener");
+        NSLog(@"CPVZBSDK: Success removing video status listener");
         [videoClient removeVideoStatusDelegate:self];
     }
 }
 
 -(void) notifyMediaStatus:(VZBVideoStatus*) videoStatus {
 
-    NSLog(@"RNVZBSDK: Sending media status %@", videoStatus);
+    NSLog(@"CPVZBSDK: Sending media status %@", videoStatus);
 //    NSDictionary* videoStatusMap = [self getVideoStatusMap:videoStatus];
 //    [self sendEvent:@"VZB_MEDIA_STATUS" withBody:videoStatusMap];
 }

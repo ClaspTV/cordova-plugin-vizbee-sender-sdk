@@ -1,6 +1,7 @@
 package tv.vizbee.cdsender;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.android.gms.cast.framework.CastOptions;
 import com.google.android.gms.cast.framework.OptionsProvider;
@@ -15,6 +16,10 @@ import java.util.List;
 import tv.vizbee.api.RemoteActivity;
 
 public class CastOptionsProvider implements OptionsProvider {
+
+    private static final String LOG_TAG = CastOptionsProvider.class.getName();
+
+    public static String receiverAppId;
 
     @Override
     public CastOptions getCastOptions(Context context) {
@@ -41,8 +46,9 @@ public class CastOptionsProvider implements OptionsProvider {
                 .setNotificationOptions(notificationOptions)
                 .build();
 
+        Log.i(LOG_TAG, "Building CastOptions with receiver applicationId " + receiverAppId);
         return new CastOptions.Builder()
-                .setReceiverApplicationId("")
+                .setReceiverApplicationId(receiverAppId.isEmpty() ? "" : receiverAppId)
                 .setCastMediaOptions(mediaOptions)
                 .build();
     }
@@ -51,6 +57,5 @@ public class CastOptionsProvider implements OptionsProvider {
     public List<SessionProvider> getAdditionalSessionProviders(Context appContext) {
         return null;
     }
-
 }
 

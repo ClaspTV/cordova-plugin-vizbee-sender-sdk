@@ -3,6 +3,13 @@ var exec = require('cordova/exec');
 module.exports = {
 
     /**
+	 * Set Chromecast Apstore id to show the lock/notification controls while casting
+	 */
+	setChromecastAppStoreId : function(chromecastAppstoreId) {
+        exec(null, null, "VizbeeSenderSDK", "setChromecastAppStoreId", [chromecastAppstoreId]);
+    },
+
+    /**
 	 * Initialize VizbeeSDK
 	 */
 	initialize : function(appId) {
@@ -12,8 +19,8 @@ module.exports = {
     /**
 	 * Add CastIcon
 	 */
-	addCastIcon : function(x, y) {
-        exec(null, null, "VizbeeSenderSDK", "addCastIcon", [x, y]);
+	addCastIcon : function(x, y, width, height) {
+        exec(null, null, "VizbeeSenderSDK", "addCastIcon", [x, y, width, height]);
     },
 
     /**

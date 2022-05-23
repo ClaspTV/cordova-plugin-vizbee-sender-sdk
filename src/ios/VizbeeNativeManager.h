@@ -3,6 +3,8 @@
 
 @interface VizbeeNativeManager : CDVPlugin
 
+-(void) setChromecastAppStoreId:(CDVInvokedUrlCommand*)command;
+
 -(void) initialize:(CDVInvokedUrlCommand*)command;
 
 -(void) addCastIcon:(CDVInvokedUrlCommand *)command;

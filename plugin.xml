@@ -36,7 +36,7 @@
         <source url="https://github.com/CocoaPods/Specs.git"/>
       </config>
       <pods use-frameworks="false">
-        <pod name="VizbeeKit" spec="6.1.7" embed="true" />
+        <pod name="VizbeeKit" spec="6.1.8" embed="true" />
         <pod name="google-cast-sdk-no-bluetooth-dynamic" spec="4.5.0" embed="true"/>
       </pods>
     </podspec>
@@ -47,6 +47,7 @@
     <source-file src="src/ios/VizbeeAppAdapter.m" />
     <header-file src="src/ios/VizbeeVideo.h" />
     <source-file src="src/ios/VizbeeVideo.m" />
+    <source-file src="src/ios/VizbeeStyles.swift" />
   </platform>
 
   <platform name="android">
@@ -58,7 +59,7 @@
 
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
       android:usesCleartextTraffic="true"
-      
+
       <meta-data android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME" android:value="tv.vizbee.cdsender.CastOptionsProvider" />
 
       <activity
@@ -82,7 +83,8 @@
     <source-file src="src/android/java/VizbeeVideo.java" target-dir="tv/vizbee/cdsender" />
     <source-file src="src/android/java/VizbeeCastButtonView.java" target-dir="tv/vizbee/cdsender" />
 
-    <resource-file src="src/android/res/values/vizbee.xml"
-            target="res/values/vizbee.xml" />
+    <resource-file src="src/android/res/values/vizbee.xml" target="res/values/vizbee.xml" />
+    <resource-file src="src/android/res/layout/cast_button.xml" target="res/layout/cast_button.xml" />
+    <resource-file src="src/android/res/drawable/ic_cast_button_background.xml" target="res/drawable/ic_cast_button_background.xml" />
   </platform>
 </plugin>

@@ -1,10 +1,17 @@
 package tv.vizbee.cdsender;
 
 import android.app.Activity;
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Build;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
+
+import com.google.android.gms.cast.framework.CastContext;
+import com.mgm.apps.roar.R;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -12,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import tv.vizbee.api.RemoteButton;
 import tv.vizbee.api.VizbeeContext;
 import tv.vizbee.api.VizbeeOptions;
 import tv.vizbee.api.session.SessionState;
@@ -35,6 +43,10 @@ public class VizbeeNativeManager extends CordovaPlugin {
         Log.i(LOG_TAG, "execute " + action);
 
         switch (action) {
+            case "setChromecastAppStoreId": {
+                CastOptionsProvider.receiverAppId = args.get(0).toString();
+                break;
+            }
             case "initialize": {
                 String vizbeeAppId = args.get(0).toString();
                 cordova.getActivity().runOnUiThread(() -> initialize(vizbeeAppId));
@@ -43,7 +55,9 @@ public class VizbeeNativeManager extends CordovaPlugin {
             case "addCastIcon": {
                 int x = (int) args.get(0);
                 int y = (int) args.get(1);
-                cordova.getActivity().runOnUiThread(() -> addCastIcon(x, y));
+                int width = (int) args.get(2);
+                int heigt = (int) args.get(3);
+                cordova.getActivity().runOnUiThread(() -> addCastIcon(x, y, width, heigt));
                 break;
             }
             case "removeCastIcon": {
@@ -74,6 +88,10 @@ public class VizbeeNativeManager extends CordovaPlugin {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             cordova.getActivity().onTopResumedActivityChanged(true);
         }
+
+        // init Vizbee after castContext setup for lock/notification controls
+        CastContext.getSharedInstance(cordova.getActivity());
+
         VizbeeOptions options = new VizbeeOptions.Builder().enableProduction(true).build();
         VizbeeContext.getInstance().enableVerboseLogging();
         VizbeeContext.getInstance().init(cordova.getActivity().getApplication(), appId, new VizbeeAppAdapter(), options);
@@ -83,13 +101,22 @@ public class VizbeeNativeManager extends CordovaPlugin {
     // UI - CastButton
     //----------------
 
-    public void addCastIcon(int x, int y) {
+    public void addCastIcon(int x, int y, int width, int height) {
 
-        Log.v(LOG_TAG, "Adding CastIcon");
+        Log.v(LOG_TAG, "Adding CastIcon at x " + x + " y "  + y + " width " + width + " height " + height);
+
+        LayoutInflater inflater = (LayoutInflater) cordova.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        RemoteButton m_button = (RemoteButton) inflater.inflate(R.layout.cast_button, null);
+
+        DisplayMetrics displayMetrics = cordova.getActivity().getResources().getDisplayMetrics();
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                (width * (int)displayMetrics.density),
+                (height * (int)displayMetrics.density));
+        params.leftMargin = (int) (x * displayMetrics.density);
+        params.topMargin  = (int) (y * displayMetrics.density);
 
         FrameLayout layout = (FrameLayout) webView.getView().getParent();
-        VizbeeCastButtonView vizbeeCastButtonView = new VizbeeCastButtonView(cordova.getActivity(), x, y);
-        layout.addView(vizbeeCastButtonView);
+        layout.addView(m_button, params);
     }
 
     public void removeCastIcon() {

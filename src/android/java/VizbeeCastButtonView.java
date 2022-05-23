@@ -1,9 +1,13 @@
 package tv.vizbee.cdsender;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.widget.FrameLayout;
+
+import com.mgm.apps.roar.R;
 
 import tv.vizbee.api.RemoteButton;
 
@@ -16,14 +20,9 @@ public class VizbeeCastButtonView extends FrameLayout {
         super(context);
 
         // button
-        m_button = new RemoteButton(context);
-
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(72, 72);
-        DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
-        params.leftMargin = (int) (x * displayMetrics.density);
-        params.topMargin  = (int) (y * displayMetrics.density);
-
-        this.addView(m_button, params);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        m_button = (RemoteButton) inflater.inflate(R.layout.cast_button, null);
+        this.addView(m_button);
     }
 
      @Override

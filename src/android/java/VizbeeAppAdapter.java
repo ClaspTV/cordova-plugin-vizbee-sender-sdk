@@ -44,10 +44,10 @@ public class VizbeeAppAdapter implements ISmartPlayAdapter {
         videoMetadata.setSubtitle(vizbeeVideo.getSubtitle());
         videoMetadata.setImageURL(vizbeeVideo.getImageUrl());
         videoMetadata.setLive(vizbeeVideo.isLive());
-        videoMetadata.setCustomMetadata(new JSONObject(vizbeeVideo.getCustomProperties()));
+        videoMetadata.setCustomMetadata(vizbeeVideo.getCustomProperties());
 
         iCommandCallback.onSuccess(videoMetadata);
-        Log.d(LOG_TAG, "getMetadataFromVideo:completed");
+        Log.d(LOG_TAG, "getMetadataFromVideo:completed " + videoMetadata);
     }
 
     @Override
@@ -66,9 +66,10 @@ public class VizbeeAppAdapter implements ISmartPlayAdapter {
         VideoStreamInfo videoStreamInfo = new VideoStreamInfo();
         videoStreamInfo.setGUID(vizbeeVideo.getGuid());
         videoStreamInfo.setVideoURL(vizbeeVideo.getStreamUrl());
-        videoStreamInfo.setCustomStreamInfo(new JSONObject(vizbeeVideo.getCustomProperties()));
+        videoStreamInfo.setCustomStreamInfo(vizbeeVideo.getCustomProperties());
 
         iCommandCallback.onSuccess(videoStreamInfo);
+        Log.d(LOG_TAG, "getStreamingInfoFromVideo:completed " + videoStreamInfo + " authToken " + videoStreamInfo.getCustomStreamInfo());
     }
 
     @Override

@@ -24,7 +24,7 @@ public class VizbeeVideo {
     private double startPositionInSeconds = 0;
 
     // custom 
-    private Map<String, Object> customProperties = new HashMap<String, Object>();
+    private JSONObject customProperties;
 
     public java.lang.String getGuid() {
         return guid;
@@ -58,7 +58,7 @@ public class VizbeeVideo {
         this.startPositionInSeconds = position;
     }
 
-    public Map<String, Object> getCustomProperties() {
+    public JSONObject getCustomProperties() {
         return customProperties;
     }
 
@@ -75,9 +75,8 @@ public class VizbeeVideo {
             streamUrl = videoJsonObject.has("streamUrl") ? videoJsonObject.getString("streamUrl") : "";
             startPositionInSeconds = videoJsonObject.has("startPositionInSeconds") ? videoJsonObject.getDouble("startPositionInSeconds") : 0;
 
-            customProperties = new HashMap<>();
             if (videoJsonObject.has("customProperties")) {
-                customProperties = (Map<String, Object>) videoJsonObject.getJSONObject("customProperties");
+                customProperties = videoJsonObject.getJSONObject("customProperties");
             }
         } catch (JSONException e) {
             e.printStackTrace();
