@@ -15,7 +15,7 @@ See [build setup & integration instructions](https://gist.github.com/vizbee/7b72
 
 ### iOS
 
-**Failed to update the *-Info.plist**
-If some plugins has config-file tag for *-Info.plist and config.xml has edit-config tag for *-Info.plist, this error may happen. In this case, remove platforms/* and plugins/*, and then cordova platform add ios and cordova prepare again. (If you do cordova prepare without cordova platform add ios, this error may happen)
+- Failed to update the `*-Info.plist`  
+  - If some plugins has `config-file` tag for `*-Info.plist` and `config.xml` has `edit-config` tag for `*-Info.plist`, this error may happen. In this case, remove `platforms/*` and `plugins/*`, and then cordova platform add ios and cordova prepare again. (If you do cordova prepare without cordova platform add ios, this error may happen)
 
 ### Android
