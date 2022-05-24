@@ -15,6 +15,6 @@ See [build setup instructions](https://gist.github.com/vizbee/7b725288d2ef6ec906
 Once you are setup, you can get further instructions for integrating this Cordova Plugin Vizbeee Sender from the [Vizbee console]([https://console.vizbee.tv](https://console.vizbee.tv/app/vzb2018119/develop/guides/reactnative-snippets))
   
 
-# Build Errors
+## Build Errors
 
 If some plugins has config-file tag for *-Info.plist and config.xml has edit-config tag for *-Info.plist, this error may happen. In this case, remove platforms/* and plugins/*, and then cordova platform add ios and cordova prepare again. (If you do cordova prepare without cordova platform add ios, this error may happen)
