@@ -55,6 +55,9 @@
             https://gist.github.com/vizbee/7e9613f76a546c8f9ed9087e91bdc7b1#customize-overlay-cards
         -->
 
+        <item name="vzb_overlayTitleLabelStyle">@style/Theme.Vizbee.Custom.OverlayTitleLabelStyle</item>
+        <item name="vzb_overlaySubtitleLabelStyle">@style/Theme.Vizbee.Custom.OverlaySubtitleLabelStyle</item>
+
         <!-- -->
         <!-- INTERSTITIAL CARD -->
         <!-- -->
@@ -64,8 +67,13 @@
             https://gist.github.com/vizbee/7e9613f76a546c8f9ed9087e91bdc7b1#customize-interstitial-cards
         -->
 
+        <item name="vzb_textAppearanceTitle1">@style/Theme.Vizbee.TitleLabelStyle</item>
+        <item name="vzb_titledImageViewTitleLabelStyle">@style/Theme.Vizbee.TitledImageViewTitleLabelStyle</item>
+        <item name="vzb_titledImageViewSubtitleLabelStyle">@style/Theme.Vizbee.TitledImageViewSubtitleLabelStyle</item>
+
         <!-- Buttons -->
         <item name="vzb_callToActionButtonStyle">@style/VizbeeTheme.CallToAction</item>
+        <item name="vzb_deviceStatusViewDisconnectButtonStyle">@style/VizbeeTheme.CallToAction</item>
 
          <!-- -->
          <!-- SPECIFIC CARD ATTRIBUTES -->
@@ -76,7 +84,9 @@
             Customize the Player card as shown here
             https://gist.github.com/vizbee/7e9613f76a546c8f9ed9087e91bdc7b1#customize-player-card
         -->
-        
+        <item name="vzb_videoPlayerControlButtonStyle">@style/VizbeeTheme.VideoPlayerControlButton</item>
+        <item name="vzb_playerControlsViewPlayPauseButtonStyle">@style/VizbeeTheme.VideoPlayerPlayPauseButton</item>
+
          <!-- -->
          <!-- SPECIFIC VIEW ATTRIBUTES -->
          <!-- -->
@@ -93,11 +103,44 @@
 
    </style>
 
-    <!-- <style name="Theme.Vizbee.Custom.BackgroundStyle">
-         The background image your app will display in Vizbee's UI
-         <item name="vzb_drawable">@drawable/vizbee_cards_background</item>
-    </style> -->
+    <style name="Theme.Vizbee.Custom.OverlayTitleLabelStyle" parent="@style/Widget.Vizbee.OverlayTitleLabel">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAppearance">?attr/vzb_textAppearanceTitle2</item>
+    </style>
 
+    <style name="Theme.Vizbee.Custom.OverlaySubtitleLabelStyle" parent="@style/Widget.Vizbee.OverlaySubtitleLabel">
+        <item name="vzb_typeface">?attr/vzb_secondaryFont</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textAppearance">?attr/vzb_textAppearanceBody</item>
+    </style>
+
+    <!-- title label style-->
+    <style name="Theme.Vizbee.TitleLabelStyle" parent="TextAppearance.Vizbee.Title1">
+        <item name="vzb_typeface">?attr/vzb_primaryColor</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textAppearance">?attr/vzb_textAppearanceTitle2</item>
+    </style>
+
+    <!-- player card title style-->
+    <style name="Theme.Vizbee.TitledImageViewTitleLabelStyle" parent="Widget.Vizbee.Futura.TitledImageViewTitleLabel">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textAppearance">?attr/vzb_textAppearanceTitle2</item>
+        <item name="android:paddingTop">28dp</item>
+    </style>
+
+    <!-- player card subtitle style-->
+    <style name="Theme.Vizbee.TitledImageViewSubtitleLabelStyle" parent="Widget.Vizbee.Futura.TitledImageViewSubtitleLabel">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAppearance">?attr/vzb_textAppearanceTitle3</item>
+    </style>
+
+    <!-- button -->
     <style name="VizbeeTheme.CallToAction" parent="@style/Widget.Vizbee.Futura.Button.CallToAction">
         <item name="android:textAppearance">?attr/vzb_textAppearanceTitle2</item>
         <item name="vzb_backgroundEnabled">?attr/vzb_secondaryColor</item>
@@ -105,13 +148,13 @@
         <item name="android:layout_marginTop">32dp</item>
     </style>
 
-    <!-- Device Info view -->
-    <!--<style name="Theme.Vizbee.Custom.DeviceInfoViewNameLabelStyle" parent="Widget.Vizbee.Futura.DeviceInfoViewNameLabel">
-        <item name="android:textAppearance">?attr/vzb_textAppearanceBody</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="vzb_typeface">?attr/vzb_primaryFont</item>
-        <item name="android:singleLine">false</item>
-    </style> -->
+    <style name="VizbeeTheme.VideoPlayerControlButton" parent="Widget.Vizbee.Futura.Button.VideoPlayerControl">
+        <item name="vzb_srcColor">?attr/vzb_secondaryColor</item>
+    </style>
+
+    <style name="VizbeeTheme.VideoPlayerPlayPauseButton" parent="Widget.Vizbee.Futura.Button.VideoPlayerControl.PlayPause">
+        <item name="vzb_srcColor">?attr/vzb_secondaryColor</item>
+    </style>
 
     <!--- ?attr/vzb_secondaryColor does not work as we don't apply the vizbee custom theme to the
     activity hosting the cast icon. -->

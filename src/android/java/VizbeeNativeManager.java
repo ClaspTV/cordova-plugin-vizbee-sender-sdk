@@ -15,6 +15,7 @@ import com.mgm.apps.roar.R;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,6 +34,8 @@ public class VizbeeNativeManager extends CordovaPlugin {
 
     private static final String LOG_TAG = VizbeeNativeManager.class.getName();
 
+    static CallbackContext callbackContext;
+
     //----------------
     // Cordova execute
     //----------------
@@ -41,6 +44,8 @@ public class VizbeeNativeManager extends CordovaPlugin {
     public boolean execute(String action, JSONArray args, CallbackContext cbContext) throws JSONException {
 
         Log.i(LOG_TAG, "execute " + action);
+
+        callbackContext = cbContext;
 
         switch (action) {
             case "setChromecastAppStoreId": {
@@ -70,7 +75,7 @@ public class VizbeeNativeManager extends CordovaPlugin {
             }
             case "smartPlay": {
                 JSONObject vizbeeVideoMap = (JSONObject) args.get(0);
-                cordova.getActivity().runOnUiThread(() -> smartPlay(vizbeeVideoMap, cbContext));
+                cordova.getActivity().runOnUiThread(() -> smartPlay(vizbeeVideoMap));
                 break;
             }
         }
@@ -172,7 +177,7 @@ public class VizbeeNativeManager extends CordovaPlugin {
         }
     }
 
-    public void smartPlay(JSONObject vizbeeVideoMap, CallbackContext callbackContext) {
+    public void smartPlay(JSONObject vizbeeVideoMap) {
 
         Log.v(LOG_TAG, "Invoking smartPlay");
 
@@ -191,14 +196,18 @@ public class VizbeeNativeManager extends CordovaPlugin {
 
           Log.i(LOG_TAG, "SmartPlay success in casting content");
             if (callbackContext != null) {
-                callbackContext.success("Playing on TV");
+                PluginResult result = new PluginResult(PluginResult.Status.OK, "Playing on TV");
+                result.setKeepCallback(true);
+                callbackContext.sendPluginResult(result);
             }
 
         } else {
 
           Log.e(LOG_TAG, "SmartPlay failed in casting content");
             if (callbackContext != null) {
-                callbackContext.success("Play on Phone");
+                PluginResult result = new PluginResult(PluginResult.Status.OK, "Play on Phone");
+                result.setKeepCallback(true);
+                callbackContext.sendPluginResult(result);
             }
         }
     }

@@ -48,7 +48,7 @@ public class CastOptionsProvider implements OptionsProvider {
 
         Log.i(LOG_TAG, "Building CastOptions with receiver applicationId " + receiverAppId);
         return new CastOptions.Builder()
-                .setReceiverApplicationId(receiverAppId.isEmpty() ? "" : receiverAppId)
+                .setReceiverApplicationId((null == receiverAppId || receiverAppId.isEmpty()) ? "" : receiverAppId)
                 .setCastMediaOptions(mediaOptions)
                 .build();
     }

@@ -1,13 +1,18 @@
 #import "VizbeeNativeManager.h"
 #import "VizbeeAppAdapter.h"
 #import "VizbeeVideo.h"
+#import "VizbeeStyles.h"
 
 #import <VizbeeKit/VizbeeKit.h>
 
 @interface VizbeeNativeManager() <VZBSessionStateDelegate, VZBVideoStatusUpdateDelegate>
 
+@property (nonatomic, assign) BOOL isSDKInitialized;
+
 @property (nonatomic, assign) BOOL hasListeners;
 @property (nonatomic, assign) VZBSessionState lastUpdatedState;
+
+@property (nonatomic, strong) VizbeeAppAdapter* vizbeeAppAdapter;
 
 @end
 
@@ -22,19 +27,25 @@
 }
 
 -(void) initialize:(CDVInvokedUrlCommand*) command {
+        
+    if (!self.isSDKInitialized) {
+        
+        self.isSDKInitialized = YES;
+        
+        // get appid
+        NSString* vizbeeAppId = command.arguments[0];
+        NSLog(@"Initialize VizbeeSDK with AppId %@", vizbeeAppId);
 
-    NSLog(@"Initialize VizbeeSDK");
-    
-    // get appid
-    NSString* vizbeeAppId = command.arguments[0];
+        // initialize the sdk
+        VZBOptions *vizbeeOptions = [VZBOptions new];
+        vizbeeOptions.uiConfig = [VizbeeStyles darkTheme];
+        self.vizbeeAppAdapter = [[VizbeeAppAdapter alloc] init];
+        [Vizbee startWithAppID:vizbeeAppId appAdapterDelegate:self.vizbeeAppAdapter andVizbeeOptions:vizbeeOptions];
 
-    // initialize the sdk
-    VZBOptions *vizbeeOptions = [VZBOptions new];
-    vizbeeOptions.uiConfig = VizbeeStyles.darkTheme;
-    VizbeeAppAdapter* vizbeeAppAdapter = [[VizbeeAppAdapter alloc] init];
-    [Vizbee startWithAppID:vizbeeAppId appAdapterDelegate:vizbeeAppAdapter andVizbeeOptions:vizbeeOptions];
-
-    [self initNotifications];
+        [self initNotifications];
+    } else {
+        NSLog(@"Ignoring multiple calls to initialize the VizbeeSDK");
+    }
 }
 
 -(void) initNotifications {
@@ -149,6 +160,9 @@
 }
 
 -(void) smartPlay:(CDVInvokedUrlCommand *)command {
+        
+    self.vizbeeAppAdapter.callbackId = command.callbackId;
+    self.vizbeeAppAdapter.commandDelegate = self.commandDelegate;
     
     NSLog(@"Invoking smartPlay");
     [self topViewControllerThreadSafe:^(UIViewController* vc) {
@@ -172,6 +186,7 @@
             NSLog(@"SmartPlay success in casting content");
             if (nil != command) {
                  CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Playing on TV"];
+                 [pluginResult setKeepCallback:@YES];
                  [self.commandDelegate sendPluginResult:pluginResult callbackId: command.callbackId];
             }
 
@@ -180,6 +195,7 @@
             NSLog(@"SmartPlay failed in casting content");
             if (nil != command){
                 CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Play on Phone"];
+                [pluginResult setKeepCallback:@YES];
                 [self.commandDelegate sendPluginResult:pluginResult callbackId: command.callbackId];
             }
         }
@@ -232,7 +248,7 @@ RCT_REMAP_METHOD(getSessionConnectedDevice, getSessionConnectedDeviceWithResolve
 }
 
 -(void) pause:(CDVInvokedUrlCommand *)command {
-  
+
     VZBVideoClient* videoClient = [self getSessionVideoClient];
     if (nil != videoClient) {
         [videoClient pause];
@@ -242,7 +258,7 @@ RCT_REMAP_METHOD(getSessionConnectedDevice, getSessionConnectedDeviceWithResolve
 }
 
 -(void) seek:(CDVInvokedUrlCommand *)command {
-  
+
     VZBVideoClient* videoClient = [self getSessionVideoClient];
     NSNumber* positionNumber = command.arguments[0];
     if (nil != videoClient) {
@@ -253,7 +269,7 @@ RCT_REMAP_METHOD(getSessionConnectedDevice, getSessionConnectedDeviceWithResolve
 }
 
 -(void) stop:(CDVInvokedUrlCommand *)command {
-  
+
     VZBVideoClient* videoClient = [self getSessionVideoClient];
     if (nil != videoClient) {
         [videoClient stop];

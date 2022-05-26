@@ -4,6 +4,7 @@
 //
 
 #import "VizbeeAppAdapter.h"
+#import "VizbeeNativeManager.h"
 #import "VizbeeVideo.h"
 
 @implementation VizbeeAppAdapter
@@ -103,6 +104,16 @@
               atPosition:(NSTimeInterval)playHeadTime
             shouldAutoPlay:(BOOL)shouldAutoPlay
 presentingViewController:(UIViewController *)viewController {
+    
+    NSLog(@"CPVZBSDK:VizbeeAppAdapter:playVideoOnPhone");
+    
+    // NOTE: Replace this with event emitter/broadcaster
+    
+    if (nil != self.callbackId){
+        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Play on Phone"];
+        [pluginResult setKeepCallback:@YES];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
+    }
 }
 
 @end

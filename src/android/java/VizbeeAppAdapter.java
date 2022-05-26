@@ -1,5 +1,6 @@
 package tv.vizbee.cdsender;
 
+import org.apache.cordova.PluginResult;
 import org.json.JSONObject;
 
 import android.content.Context;
@@ -75,5 +76,9 @@ public class VizbeeAppAdapter implements ISmartPlayAdapter {
     @Override
     public void playOnLocalDevice(Context context, Object object, long position, boolean autoPlay) {
         Log.d(LOG_TAG, "playOnLocalDevice");
+
+        PluginResult result = new PluginResult(PluginResult.Status.OK, "Play on Phone");
+        result.setKeepCallback(true);
+        VizbeeNativeManager.callbackContext.sendPluginResult(result);
     }
 }

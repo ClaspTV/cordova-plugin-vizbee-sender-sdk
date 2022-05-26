@@ -47,7 +47,8 @@
     <source-file src="src/ios/VizbeeAppAdapter.m" />
     <header-file src="src/ios/VizbeeVideo.h" />
     <source-file src="src/ios/VizbeeVideo.m" />
-    <source-file src="src/ios/VizbeeStyles.swift" />
+    <source-file src="src/ios/VizbeeStyles.h" />
+    <source-file src="src/ios/VizbeeStyles.m" />
   </platform>
 
   <platform name="android">
